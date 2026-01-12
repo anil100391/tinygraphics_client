@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/dev/PBR/deps/build/tinygraphics/cmake_install.cmake",
-		"C:/dev/PBR/deps/build/tinygraphics/src/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
