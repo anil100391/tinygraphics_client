@@ -8,10 +8,6 @@ set(INSTALL_DIR "${DEPS_DIR}/install")
 
 file(MAKE_DIRECTORY "${SRC_DIR}" "${BLD_DIR}" "${INSTALL_DIR}")
 
-#include("${CMAKE_CURRENT_LIST_DIR}/SetupGLM.cmake")
-#include("${CMAKE_CURRENT_LIST_DIR}/SetupGLFW.cmake")
-#include("${CMAKE_CURRENT_LIST_DIR}/SetupGLEW.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/SetupTinygraphics.cmake")
-
 
 message(STATUS "All dependencies installed to ${INSTALL_DIR}")

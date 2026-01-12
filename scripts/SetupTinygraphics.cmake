@@ -23,7 +23,6 @@ execute_process(
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_DIR}
-    -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
 )
 
 execute_process(
