@@ -1,0 +1,11 @@
+C:/dev/PBR/deps/build/tinygraphics/CMakeFiles/edit_cache.dir
+C:/dev/PBR/deps/build/tinygraphics/CMakeFiles/rebuild_cache.dir
+C:/dev/PBR/deps/build/tinygraphics/CMakeFiles/list_install_components.dir
+C:/dev/PBR/deps/build/tinygraphics/CMakeFiles/install.dir
+C:/dev/PBR/deps/build/tinygraphics/CMakeFiles/install/local.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/tinygraphics.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/edit_cache.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/rebuild_cache.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/list_install_components.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/install.dir
+C:/dev/PBR/deps/build/tinygraphics/src/CMakeFiles/install/local.dir
