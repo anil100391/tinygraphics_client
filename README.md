@@ -29,6 +29,7 @@ In bash (on linux) or developer powershell (on windows)
   ```
   git clone https:://github.com/anil100391/tinygraphics_client.git
   cd tinygraphics_client
+  git submodule update --init --recursive
   ```
 
 * configure debug or release build
