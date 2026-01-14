@@ -6,7 +6,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/CloneGitRepo.cmake")
 clone_if_missing(
   tinygraphics
   https://github.com/anil100391/tinygraphics.git
-  temp
+  main
 )
 
 set(TINYGRAPHICS_BUILD_DIR "${BLD_DIR}/tinygraphics")
