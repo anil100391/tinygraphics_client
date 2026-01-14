@@ -8,11 +8,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # For intellisense
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-list(APPEND CMAKE_PREFIX_PATH
-   "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glew"
-   "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glfw3"
-   "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glm"
-    "${PROJECT_SOURCE_DIR}/deps/install/lib/cmake/tinygraphics")
+if (WIN32)
+  if (NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/install/lib/cmake")
+    message(STATUS "Dependencies missing; running scripts/SetupDeps.cmake to fetch/build them")
+    include("${PROJECT_SOURCE_DIR}/scripts/SetupDeps.cmake")
+
+    if (NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/install/lib/cmake")
+      message(FATAL_ERROR "Dependencies setup failed. Run \"cmake -P scripts/SetupDeps.cmake\" manually to see errors and retry.")
+    endif()
+  endif()
+
+  list(APPEND CMAKE_PREFIX_PATH
+       "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glew"
+       "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glfw3"
+       "${PROJECT_SOURCE_DIR}/deps/src/tinygraphics/deps/install/lib/cmake/glm"
+       "${PROJECT_SOURCE_DIR}/deps/install/lib/cmake/tinygraphics")
+endif()
 
 find_package(OpenGL REQUIRED)
 find_package(glm CONFIG REQUIRED)
@@ -36,8 +47,3 @@ target_include_directories(PBR PRIVATE "${CMAKE_SOURCE_DIR}")
 target_link_libraries(PBR PRIVATE tinygraphics::tinygraphics)
 
 target_compile_definitions(PBR PRIVATE NOMINMAX _USE_MATH_DEFINES)
-
-# copy resources to bin directory
-#add_custom_command(TARGET PBR POST_BUILD
-#                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-#                   ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:PBR>/res)

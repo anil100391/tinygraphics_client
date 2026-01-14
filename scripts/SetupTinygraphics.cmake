@@ -21,13 +21,13 @@ execute_process(
     -B ${TINYGRAPHICS_BUILD_DIR}
     -G Ninja
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_BUILD_TYPE=${DEPS_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_DIR}
 )
 
 execute_process(
   COMMAND ${CMAKE_COMMAND}
     --build "${TINYGRAPHICS_BUILD_DIR}"
-    --config Release
+    --config ${DEPS_BUILD_TYPE}
     --target install
 )
