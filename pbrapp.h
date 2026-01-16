@@ -1,6 +1,7 @@
 #ifndef __pbrapp_h__
 #define __pbrapp_h__
 
+#include <memory>
 #include <tinygraphics/app.h>
 #include <tinygraphics/shader.h>
 #include <tinygraphics/camera.h>
