@@ -11,14 +11,21 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Download tinygraphics release into vendor/
 set(TINYGRAPHICS_VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor/tinygraphics")
 set(TINYGRAPHICS_ARCHIVE "${CMAKE_SOURCE_DIR}/vendor/tinygraphics.zip")
+set(TINYGRAPHICS_VERSION "0.2")
 
 if(NOT EXISTS "${TINYGRAPHICS_VENDOR_DIR}")
     message(STATUS "Downloading tinygraphics ${TINYGRAPHICS_VERSION}...")
-    file(DOWNLOAD
-        "https://github.com/anil100391/tinygraphics/releases/download/0.1/tinygraphics-0.1-win64_debug.zip"
-        "${TINYGRAPHICS_ARCHIVE}"
-        STATUS download_status
-    )
+    if (WIN32)
+        file(DOWNLOAD
+            "https://github.com/anil100391/tinygraphics/releases/download/${TINYGRAPHICS_VERSION}/tinygraphics-${TINYGRAPHICS_VERSION}-win64_debug.zip"
+            "${TINYGRAPHICS_ARCHIVE}"
+            STATUS download_status)
+    elseif(UNIX)
+        file(DOWNLOAD
+            "https://github.com/anil100391/tinygraphics/releases/download/${TINYGRAPHICS_VERSION}/tinygraphics-${TINYGRAPHICS_VERSION}-Linux_debug.zip"
+            "${TINYGRAPHICS_ARCHIVE}"
+            STATUS download_status)
+    endif()
     list(GET download_status 0 status_code)
     if(NOT status_code EQUAL 0)
         message(FATAL_ERROR "Failed to download tinygraphics: ${download_status}")
@@ -42,3 +49,8 @@ target_include_directories(PBR PRIVATE .)
 target_link_libraries(PBR PRIVATE tinygraphics::tinygraphics)
 
 target_compile_definitions(PBR PRIVATE NOMINMAX _USE_MATH_DEFINES)
+
+add_custom_command(TARGET PBR POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets
+    $<TARGET_FILE_DIR:PBR>/assets)

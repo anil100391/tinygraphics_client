@@ -16,7 +16,7 @@ class PBRApp : public Application
 {
 public:
 
-    PBRApp( const WindowProperties &wprops = WindowProperties() );
+    PBRApp( const WindowProperties &wprops, const std::string &assetsDir );
     virtual ~PBRApp();
 
     virtual void Update() override;
@@ -24,6 +24,8 @@ public:
     virtual bool OnEvent( Event &evt ) override;
 
 private:
+
+    void Render();
 
     void MakeSphereMesh( unsigned int segments, unsigned int rings, float radius );
 
@@ -39,7 +41,8 @@ private:
     Camera                        _camera;
     glm::vec3                     _cameraPos {-1.0f, -1.0f, 5.0f};
     float                         _lightY = 0.0f;
-    float                         _lightAngle = 0.0f;
+    float                         _lightAngle = 2.0f;
+    glm::vec3                     _lightPos;
 };
 
 #endif // __pbrapp_h__

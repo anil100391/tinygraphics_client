@@ -12,21 +12,9 @@
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-PBRApp::PBRApp( const WindowProperties &wprops )
-    : Application( wprops )
+PBRApp::PBRApp( const WindowProperties &wprops, const std::string &assetsDir )
+    : Application( wprops, true )
 {
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL( _window, true );            // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
-
     glEnable( GL_BLEND );
     glEnable( GL_DEPTH_TEST );
 
@@ -85,8 +73,8 @@ PBRApp::PBRApp( const WindowProperties &wprops )
         "    vec3 reflectDir = reflect(lightDir, norm);\n"
         "    vec3 specular = specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), 32) * lightColor;\n"
 
-        "    vec3 color = (ambient +  diffuse /*+ specular*/) * texture(u_Texture, fragTexCoord).rgb * 2;\n"
-        "    gl_FragColor = vec4(1.25 * color, 1.0);\n"
+        "    vec3 color = (ambient +  diffuse /*+ specular*/) * texture(u_Texture, fragTexCoord).rgb;\n"
+        "    gl_FragColor = vec4(1.4 * color, 1.0);\n"
         "}"
     ;
 
@@ -105,7 +93,7 @@ PBRApp::PBRApp( const WindowProperties &wprops )
     _camera.SetLookAt( glm::vec3( 0.0f, 0.0f, 0.0f ) );
     _camera.SetUpVec( glm::vec3( 0.0f, 1.0f, 0.0f ) );
 
-    _texture = std::make_unique<Texture>( "C:/Users/anils/Downloads/lroc_color_poles_2k.png" );
+    _texture = std::make_unique<Texture>( assetsDir + "/moon.jpg" );
     _texture->Bind();
 }
 
@@ -113,10 +101,6 @@ PBRApp::PBRApp( const WindowProperties &wprops )
 // -----------------------------------------------------------------------------
 PBRApp::~PBRApp()
 {
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
 }
 
 // -----------------------------------------------------------------------------
@@ -125,13 +109,38 @@ void PBRApp::Update()
 {
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 
-    Renderer renderer;
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    Render();
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    ImGui::SliderFloat3( "Camera Position", &_cameraPos.x, 0.0f, 50.0f );
+    ImGui::SliderFloat( "Light Angle", &_lightAngle, 0.0f, 2 * M_PI );
+    ImGui::SliderFloat( "Light Distance", &_lightY, 0.0f, 50.0f );
+
+    // Rendering
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
+
+    Application::Update();
+}
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+bool PBRApp::OnEvent( Event & evt )
+{
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void PBRApp::Render()
+{
+    Renderer renderer;
 
     // uniforms
     _shader->Bind();
@@ -143,18 +152,11 @@ void PBRApp::Update()
     _shader->SetUniform2f( "u_MousePos", static_cast<float>(x), static_cast<float>(y) );
     _shader->SetUniform3f( "u_Color", 1.0f, 1.0f, 1.0f );
 
-    ImGui::SliderFloat3( "Camera Position", &_cameraPos.x, 0.0f, 50.0f );
     _camera.SetPosition( _cameraPos );
 
-    auto time = GetCurrentTime();
-    ImGui::SliderFloat( "Light Angle", &_lightAngle, 0.0f, 2 * M_PI);
     float angle = _lightAngle;
-    // angle = time * 0.25f/8;
     float xl = -4.0f * std::sin( angle );
     float zl = -4.0f * std::cos( angle );
-    // xl = 0.0f;
-    // zl = 0.0f;
-    ImGui::SliderFloat( "Light Distance", &_lightY, 0.0f, 50.0f );
     _shader->SetUniform3f( "u_LightPos", xl, _lightY, zl );
 
     glm::mat4 model = glm::mat4( 1.0f );
@@ -171,30 +173,6 @@ void PBRApp::Update()
 
     // draw
     renderer.Draw( *_vao, *_ibo, *_shader );
-
-    // draw light source
-    model = glm::translate(model, glm::vec3(xl, _lightY, zl));
-    model = glm::scale(model, glm::vec3(0.1, 0.1, 0.1));
-    _shader->SetUniformMat4f( "u_M", model );
-    _shader->SetUniform1i( "u_Emission", 1 );
-    _shader->SetUniform3f( "u_Color", 1.0f, 1.0f, 1.0f );
-    renderer.Draw( *_vao, *_ibo, *_shader );
-
-    // Rendering
-    ImGui::Render();
-    // int display_w, display_h;
-    // glfwGetFramebufferSize( _window, &display_w, &display_h );
-    // glViewport( 0, 0, display_w, display_h );
-    ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
-
-    Application::Update();
-}
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-bool PBRApp::OnEvent( Event & evt )
-{
-    return false;
 }
 
 // -----------------------------------------------------------------------------

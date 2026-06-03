@@ -6,7 +6,6 @@ Example project to demonstrate use of tinygraphics slib
 ## Requirements
 
 - CMake 3.28 or higher
-- opengl libs
 
 ## Building
 
