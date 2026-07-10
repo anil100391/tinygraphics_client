@@ -1,4 +1,5 @@
 #include <cmath>
+#include <fstream>
 #include <pbrapp.h>
 
 #include <imgui.h>
@@ -17,6 +18,7 @@ PBRApp::PBRApp( const WindowProperties &wprops, const std::string &assetsDir )
 {
     glEnable( GL_BLEND );
     glEnable( GL_DEPTH_TEST );
+    glEnable( GL_CULL_FACE );
 
     std::string vertexShader =
         "#version 330 core\n"
@@ -94,7 +96,7 @@ PBRApp::PBRApp( const WindowProperties &wprops, const std::string &assetsDir )
     _camera.SetUpVec( glm::vec3( 0.0f, 1.0f, 0.0f ) );
 
     _texture = std::make_unique<Texture>( assetsDir + "/moon.jpg" );
-    _texture->Bind();
+    _texture->Bind(0);
 }
 
 // -----------------------------------------------------------------------------

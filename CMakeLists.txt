@@ -11,7 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Download tinygraphics release into vendor/
 set(TINYGRAPHICS_VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor/tinygraphics")
 set(TINYGRAPHICS_ARCHIVE "${CMAKE_SOURCE_DIR}/vendor/tinygraphics.zip")
-set(TINYGRAPHICS_VERSION "0.2")
+set(TINYGRAPHICS_VERSION "0.3")
 
 if(NOT EXISTS "${TINYGRAPHICS_VENDOR_DIR}")
     message(STATUS "Downloading tinygraphics ${TINYGRAPHICS_VERSION}...")
