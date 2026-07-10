@@ -1,5 +1,7 @@
 #include <cmath>
+#if 0
 #include <fstream>
+#endif
 #include <pbrapp.h>
 
 #include <imgui.h>
@@ -238,6 +240,7 @@ void PBRApp::MakeSphereMesh( unsigned int segments,
        }
    }
 
+#if 0
    // write obj file for debugging
    std::ofstream out("sphere.obj");
    for (size_t i = 0; i < _vertices.size(); i += 8)
@@ -251,4 +254,5 @@ void PBRApp::MakeSphereMesh( unsigned int segments,
        out << "f " << _indices[i] + 1 << " " << _indices[i + 1] + 1 << " " << _indices[i + 2] + 1 << "\n";
    }
    out.close();
+#endif
 }
